@@ -11,13 +11,18 @@ local M = {}
 local function startGLFW(W, postf)
     local window = W.window
     local ig = W.ig
+	local gl, glc, glu, glext = W.gllib.libraries()											
     while not window:shouldClose() do
     
         W.lj_glfw.pollEvents()
+		if (window:getAttrib(W.lj_glfw.glfwc.GLFW_ICONIFIED) ~= 0) then
+            ig.lib.ImGui_ImplGlfw_Sleep(10);
+            goto continue
+        end																 		   
         
         window:makeContextCurrent()
         
-        W.gllib.gl.glClear(W.gllib.glc.GL_COLOR_BUFFER_BIT)
+        gl.glClear(glc.GL_COLOR_BUFFER_BIT)
         
         if W.preimgui then W.preimgui() end
         
@@ -41,6 +46,7 @@ local function startGLFW(W, postf)
         end
         
         window:swapBuffers()                    
+		::continue::	  
     end
     if postf then postf() end
     W.ig_impl:destroy()
@@ -112,6 +118,10 @@ local function startSDL(W, postf)
                 done = true;
             end
         end
+		if (bit.band(sdl.GetWindowFlags(window), sdl.WINDOW_MINIMIZED) > 0) then
+            sdl.Delay(10);
+            goto continue
+        end	
         --standard rendering
         sdl.gL_MakeCurrent(window, W.gl_context);
         gl.glViewport(0, 0, igio.DisplaySize.x, igio.DisplaySize.y);
@@ -137,6 +147,7 @@ local function startSDL(W, postf)
         end
         
         sdl.gL_SwapWindow(window);
+		::continue::	  
     end
     
     -- Cleanup
@@ -226,10 +237,10 @@ local function startSDL3(W, postf)
                 done = true;
             end
         end
-		-- if (bit.band(sdl.GetWindowFlags(window), sdl.WINDOW_MINIMIZED)) then
-            -- sdl.Delay(10);
-            -- continue;
-        -- end
+		if (bit.band(sdl.GetWindowFlags(window), sdl.WINDOW_MINIMIZED) > 0) then
+            sdl.Delay(10);
+            goto continue
+        end
         --standard rendering
         sdl.gL_MakeCurrent(window, W.gl_context);
         gl.glViewport(0, 0, igio.DisplaySize.x, igio.DisplaySize.y);
@@ -255,6 +266,7 @@ local function startSDL3(W, postf)
         end
         
         sdl.gL_SwapWindow(window);
+		::continue::	  
     end
     
     -- Cleanup
