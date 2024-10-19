@@ -516,7 +516,10 @@ function ImDrawList:AddBezierQuadratic(p1,p2,p3,col,thickness,num_segments)
     num_segments = num_segments or 0
     return lib.ImDrawList_AddBezierQuadratic(self,p1,p2,p3,col,thickness,num_segments)
 end
-ImDrawList.AddCallback = lib.ImDrawList_AddCallback
+function ImDrawList:AddCallback(callback,userdata,userdata_size)
+    userdata_size = userdata_size or 0
+    return lib.ImDrawList_AddCallback(self,callback,userdata,userdata_size)
+end
 function ImDrawList:AddCircle(center,radius,col,num_segments,thickness)
     num_segments = num_segments or 0
     thickness = thickness or 1.0
@@ -6794,7 +6797,6 @@ M.NavMoveRequestResolveWithLastItem = lib.igNavMoveRequestResolveWithLastItem
 M.NavMoveRequestResolveWithPastTreeNode = lib.igNavMoveRequestResolveWithPastTreeNode
 M.NavMoveRequestSubmit = lib.igNavMoveRequestSubmit
 M.NavMoveRequestTryWrapping = lib.igNavMoveRequestTryWrapping
-M.NavRestoreHighlightAfterMove = lib.igNavRestoreHighlightAfterMove
 M.NavUpdateCurrentWindowIsScrollPushableX = lib.igNavUpdateCurrentWindowIsScrollPushableX
 M.NewFrame = lib.igNewFrame
 M.NewLine = lib.igNewLine
@@ -6968,9 +6970,9 @@ function M.RenderFrameBorder(p_min,p_max,rounding)
     return lib.igRenderFrameBorder(p_min,p_max,rounding)
 end
 M.RenderMouseCursor = lib.igRenderMouseCursor
-function M.RenderNavHighlight(bb,id,flags)
+function M.RenderNavCursor(bb,id,flags)
     flags = flags or 0
-    return lib.igRenderNavHighlight(bb,id,flags)
+    return lib.igRenderNavCursor(bb,id,flags)
 end
 function M.RenderPlatformWindowsDefault(platform_render_arg,renderer_render_arg)
     platform_render_arg = platform_render_arg or nil
@@ -7100,6 +7102,8 @@ function M.SetKeyboardFocusHere(offset)
 end
 M.SetLastItemData = lib.igSetLastItemData
 M.SetMouseCursor = lib.igSetMouseCursor
+M.SetNavCursorVisible = lib.igSetNavCursorVisible
+M.SetNavCursorVisibleAfterMove = lib.igSetNavCursorVisibleAfterMove
 M.SetNavFocusScope = lib.igSetNavFocusScope
 M.SetNavID = lib.igSetNavID
 M.SetNavWindow = lib.igSetNavWindow
