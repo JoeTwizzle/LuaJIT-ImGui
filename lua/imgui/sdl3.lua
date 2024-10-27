@@ -2353,17 +2353,30 @@ M.ImGuizmo_DecomposeMatrixToComponents = lib.ImGuizmo_DecomposeMatrixToComponent
 M.ImGuizmo_DrawCubes = lib.ImGuizmo_DrawCubes
 M.ImGuizmo_DrawGrid = lib.ImGuizmo_DrawGrid
 M.ImGuizmo_Enable = lib.ImGuizmo_Enable
+M.ImGuizmo_GetID_Str = lib.ImGuizmo_GetID_Str
+M.ImGuizmo_GetID_StrStr = lib.ImGuizmo_GetID_StrStr
+M.ImGuizmo_GetID_Ptr = lib.ImGuizmo_GetID_Ptr
+function M.ImGuizmo_GetID(a1,a2) -- generic version
+    if (ffi.istype('const char*',a1) or ffi.istype('char[]',a1) or type(a1)=='string') and a2==nil then return M.ImGuizmo_GetID_Str(a1) end
+    if (ffi.istype('const char*',a1) or ffi.istype('char[]',a1) or type(a1)=='string') and (ffi.istype('const char*',a2) or ffi.istype('char[]',a2) or type(a2)=='string') then return M.ImGuizmo_GetID_StrStr(a1,a2) end
+    if ffi.istype('void *',a1) then return M.ImGuizmo_GetID_Ptr(a1) end
+    print(a1,a2)
+    error'M.ImGuizmo_GetID could not find overloaded'
+end
 M.ImGuizmo_GetStyle = lib.ImGuizmo_GetStyle
 M.ImGuizmo_IsOver_Nil = lib.ImGuizmo_IsOver_Nil
 M.ImGuizmo_IsOver_OPERATION = lib.ImGuizmo_IsOver_OPERATION
-function M.ImGuizmo_IsOver(a1) -- generic version
+M.ImGuizmo_IsOver_FloatPtr = lib.ImGuizmo_IsOver_FloatPtr
+function M.ImGuizmo_IsOver(a1,a2) -- generic version
     if a1==nil then return M.ImGuizmo_IsOver_Nil() end
     if ffi.istype('OPERATION',a1) then return M.ImGuizmo_IsOver_OPERATION(a1) end
-    print(a1)
+    if (ffi.istype('float*',a1) or ffi.istype('float[]',a1)) then return M.ImGuizmo_IsOver_FloatPtr(a1,a2) end
+    print(a1,a2)
     error'M.ImGuizmo_IsOver could not find overloaded'
 end
 M.ImGuizmo_IsUsing = lib.ImGuizmo_IsUsing
 M.ImGuizmo_IsUsingAny = lib.ImGuizmo_IsUsingAny
+M.ImGuizmo_IsUsingViewManipulate = lib.ImGuizmo_IsUsingViewManipulate
 function M.ImGuizmo_Manipulate(view,projection,operation,mode,matrix,deltaMatrix,snap,localBounds,boundsSnap)
     boundsSnap = boundsSnap or nil
     deltaMatrix = deltaMatrix or nil
@@ -2371,8 +2384,23 @@ function M.ImGuizmo_Manipulate(view,projection,operation,mode,matrix,deltaMatrix
     snap = snap or nil
     return lib.ImGuizmo_Manipulate(view,projection,operation,mode,matrix,deltaMatrix,snap,localBounds,boundsSnap)
 end
+M.ImGuizmo_PopID = lib.ImGuizmo_PopID
+M.ImGuizmo_PushID_Str = lib.ImGuizmo_PushID_Str
+M.ImGuizmo_PushID_StrStr = lib.ImGuizmo_PushID_StrStr
+M.ImGuizmo_PushID_Ptr = lib.ImGuizmo_PushID_Ptr
+M.ImGuizmo_PushID_Int = lib.ImGuizmo_PushID_Int
+function M.ImGuizmo_PushID(a1,a2) -- generic version
+    if (ffi.istype('const char*',a1) or ffi.istype('char[]',a1) or type(a1)=='string') and a2==nil then return M.ImGuizmo_PushID_Str(a1) end
+    if (ffi.istype('const char*',a1) or ffi.istype('char[]',a1) or type(a1)=='string') and (ffi.istype('const char*',a2) or ffi.istype('char[]',a2) or type(a2)=='string') then return M.ImGuizmo_PushID_StrStr(a1,a2) end
+    if ffi.istype('void *',a1) then return M.ImGuizmo_PushID_Ptr(a1) end
+    if (ffi.istype('int32_t',a1) or type(a1)=='number') then return M.ImGuizmo_PushID_Int(a1) end
+    print(a1,a2)
+    error'M.ImGuizmo_PushID could not find overloaded'
+end
 M.ImGuizmo_RecomposeMatrixFromComponents = lib.ImGuizmo_RecomposeMatrixFromComponents
+M.ImGuizmo_SetAlternativeWindow = lib.ImGuizmo_SetAlternativeWindow
 M.ImGuizmo_SetAxisLimit = lib.ImGuizmo_SetAxisLimit
+M.ImGuizmo_SetAxisMask = lib.ImGuizmo_SetAxisMask
 function M.ImGuizmo_SetDrawlist(drawlist)
     drawlist = drawlist or nil
     return lib.ImGuizmo_SetDrawlist(drawlist)

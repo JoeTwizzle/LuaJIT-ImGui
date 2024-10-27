@@ -6326,6 +6326,8 @@ void ImPlot_Locator_Default(ImPlotTicker* ticker,const ImPlotRange range,float p
 void ImPlot_Locator_Time(ImPlotTicker* ticker,const ImPlotRange range,float pixels,                                                                                             _Bool                                                                                                   vertical,ImPlotFormatter formatter,void* formatter_data);
 void ImPlot_Locator_Log10(ImPlotTicker* ticker,const ImPlotRange range,float pixels,                                                                                              _Bool                                                                                                    vertical,ImPlotFormatter formatter,void* formatter_data);
 void ImPlot_Locator_SymLog(ImPlotTicker* ticker,const ImPlotRange range,float pixels,                                                                                               _Bool                                                                                                     vertical,ImPlotFormatter formatter,void* formatter_data);
+typedef struct ImGuiWindow ImGuiWindow;
+struct ImGuiWindow;
 typedef enum {
       TRANSLATE_X = (1u << 0),
       TRANSLATE_Y = (1u << 1),
@@ -6387,6 +6389,7 @@ void ImGuizmo_BeginFrame(void);
 void ImGuizmo_SetImGuiContext(ImGuiContext* ctx);
 _Bool                ImGuizmo_IsOver_Nil(void);
 _Bool                ImGuizmo_IsUsing(void);
+_Bool                ImGuizmo_IsUsingViewManipulate(void);
 _Bool                ImGuizmo_IsUsingAny(void);
 void ImGuizmo_Enable(                               _Bool                                     enable);
 void ImGuizmo_DecomposeMatrixToComponents(const float* matrix,float* translation,float* rotation,float* scale);
@@ -6398,12 +6401,23 @@ void ImGuizmo_DrawGrid(const float* view,const float* projection,const float* ma
 _Bool                ImGuizmo_Manipulate(const float* view,const float* projection,OPERATION operation,MODE mode,float* matrix,float* deltaMatrix,const float* snap,const float* localBounds,const float* boundsSnap);
 void ImGuizmo_ViewManipulate_Float(float* view,float length,ImVec2 position,ImVec2 size,ImU32 backgroundColor);
 void ImGuizmo_ViewManipulate_FloatPtr(float* view,const float* projection,OPERATION operation,MODE mode,float* matrix,float length,ImVec2 position,ImVec2 size,ImU32 backgroundColor);
+void ImGuizmo_SetAlternativeWindow(ImGuiWindow* window);
 void ImGuizmo_SetID(int id);
+void ImGuizmo_PushID_Str(const char* str_id);
+void ImGuizmo_PushID_StrStr(const char* str_id_begin,const char* str_id_end);
+void ImGuizmo_PushID_Ptr(const void* ptr_id);
+void ImGuizmo_PushID_Int(int int_id);
+void ImGuizmo_PopID(void);
+ImGuiID ImGuizmo_GetID_Str(const char* str_id);
+ImGuiID ImGuizmo_GetID_StrStr(const char* str_id_begin,const char* str_id_end);
+ImGuiID ImGuizmo_GetID_Ptr(const void* ptr_id);
 _Bool                ImGuizmo_IsOver_OPERATION(OPERATION op);
 void ImGuizmo_SetGizmoSizeClipSpace(float value);
 void ImGuizmo_AllowAxisFlip(                                      _Bool                                            value);
 void ImGuizmo_SetAxisLimit(float value);
+void ImGuizmo_SetAxisMask(                                    _Bool                                          x,                                           _Bool                                                 y,                                                  _Bool                                                        z);
 void ImGuizmo_SetPlaneLimit(float value);
+_Bool                ImGuizmo_IsOver_FloatPtr(float* position,float pixelRadius);
 Style* Style_Style(void);
 void Style_destroy(Style* self);
 Style* ImGuizmo_GetStyle(void);
