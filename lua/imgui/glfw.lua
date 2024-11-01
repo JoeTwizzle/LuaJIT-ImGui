@@ -2265,10 +2265,7 @@ TextEditor.GetTabSize = lib.TextEditor_GetTabSize
 TextEditor.GetText = lib.TextEditor_GetText
 
 TextEditor.GetUndoIndex = lib.TextEditor_GetUndoIndex
-function TextEditor:ImGuiDebugPanel(panelName)
-    panelName = panelName or "Debug"
-    return lib.TextEditor_ImGuiDebugPanel(self,panelName)
-end
+TextEditor.ImGuiDebugPanel = lib.TextEditor_ImGuiDebugPanel
 TextEditor.IsAutoIndentEnabled = lib.TextEditor_IsAutoIndentEnabled
 TextEditor.IsOverwriteEnabled = lib.TextEditor_IsOverwriteEnabled
 TextEditor.IsReadOnlyEnabled = lib.TextEditor_IsReadOnlyEnabled
