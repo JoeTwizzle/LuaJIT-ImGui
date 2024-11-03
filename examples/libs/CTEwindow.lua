@@ -159,7 +159,9 @@ local function Save(self,fname)
 		-- local str = ffi.string(cstr)
 		-- ig.lib.TextEditor_GetText_free(cstr)
 		
-		local str = ffi.string(ig.lib.TextEditor_GetText_static(editor))
+		--local str = ffi.string(ig.lib.TextEditor_GetText_static(editor))
+		
+		local str = ffi.string(editor:GetText())
 		
 		file:write(str)
 		file:close()

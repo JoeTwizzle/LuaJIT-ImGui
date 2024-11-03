@@ -6932,6 +6932,7 @@ void TextEditor_SetText(TextEditor* self,const char* aText);
 char* TextEditor_GetText_alloc(TextEditor* self);
 void TextEditor_GetText_free(char* ptr);
 const char* TextEditor_GetText_static(TextEditor* self);
+const char* TextEditor_GetText(TextEditor* self);
 void TextEditor_ImGuiDebugPanel(TextEditor* self,const char* panelName);
 typedef struct GLFWwindow GLFWwindow;
 typedef struct GLFWmonitor GLFWmonitor;
