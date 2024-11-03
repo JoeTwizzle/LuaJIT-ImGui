@@ -2229,7 +2229,7 @@ TextEditor.GetLineCount = lib.TextEditor_GetLineCount
 TextEditor.GetLineSpacing = lib.TextEditor_GetLineSpacing
 TextEditor.GetPalette = lib.TextEditor_GetPalette
 TextEditor.GetTabSize = lib.TextEditor_GetTabSize
-TextEditor.GetText = lib.TextEditor_GetText
+
 
 TextEditor.GetUndoIndex = lib.TextEditor_GetUndoIndex
 TextEditor.ImGuiDebugPanel = lib.TextEditor_ImGuiDebugPanel

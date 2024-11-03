@@ -154,7 +154,13 @@ local function Save(self,fname)
 	if fname then
 		local file,err = io.open(fname,"w")
 		assert(file,err)
-		local str = ffi.string(editor:GetText())
+		
+		-- local cstr = ig.lib.TextEditor_GetText_alloc(editor)
+		-- local str = ffi.string(cstr)
+		-- ig.lib.TextEditor_GetText_free(cstr)
+		
+		local str = ffi.string(ig.lib.TextEditor_GetText_static(editor))
+		
 		file:write(str)
 		file:close()
 	end
