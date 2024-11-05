@@ -545,7 +545,7 @@ local function code_for_imguifuns(st,fundefs,structs)
 	for _,f in ipairs(funs) do
 		local defs = fundefs[f]
 		for _,def in ipairs(defs) do
-			if not def.location:match"imgui_freetype" then
+			if FREETYPE or (not def.location:match"imgui_freetype") then
 			def.stname = "M"
 			function_gen(code,def)
 			end
