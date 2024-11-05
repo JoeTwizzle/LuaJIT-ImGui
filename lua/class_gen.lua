@@ -535,7 +535,7 @@ local function code_for_struct(st,fundefs,structs)
 	testcode(codestr)
 	return codestr
 end
-
+local FREETYPE = false
 --ImGui namespace generator
 local function code_for_imguifuns(st,fundefs,structs)
 	local funs = structs[st]
@@ -545,8 +545,10 @@ local function code_for_imguifuns(st,fundefs,structs)
 	for _,f in ipairs(funs) do
 		local defs = fundefs[f]
 		for _,def in ipairs(defs) do
+			if not def.location:match"imgui_freetype" then
 			def.stname = "M"
 			function_gen(code,def)
+			end
 		end
 		--if has overloading create the generic
 		if #defs > 1 then
@@ -583,7 +585,8 @@ local function make_funcdefs(sources)
 end
 --------------------------------------------------------------
 
-local function class_gen(sources)
+local function class_gen(sources, ft_gen)
+	FREETYPE = ft_gen
 	--firs get enumsvalues table
 	make_enums(sources)
 	local fundefs = make_funcdefs(sources)

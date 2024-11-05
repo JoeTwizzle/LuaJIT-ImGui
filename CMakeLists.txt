@@ -79,8 +79,6 @@ if(IMGUI_FREETYPE)
 	list(APPEND IMGUI_ft_LIBRARIES freetype)
 	list(APPEND IMGUI_LIBRARIES freetype)
 	list(APPEND IMGUI_SOURCES ./cimgui/imgui/misc/freetype/imgui_freetype.cpp)
-	add_definitions("-DCIMGUI_FREETYPE=1")
-	add_definitions("-DIMGUI_ENABLE_STB_TRUETYPE=1") #have stb also
 endif(IMGUI_FREETYPE)
 
 if(IMPL_OPENGL3)
@@ -109,6 +107,16 @@ if(IMPL_EXTRAS)
 endif(IMPL_EXTRAS)
 
 add_library(cimgui_base OBJECT ${IMGUI_SOURCES})
+
+if(IMGUI_FREETYPE)
+	target_compile_definitions(cimgui_base PUBLIC IMGUI_ENABLE_FREETYPE)
+	target_compile_definitions(cimgui_base PUBLIC IMGUI_ENABLE_STB_TRUETYPE)
+endif(IMGUI_FREETYPE)
+
+if(IMGUI_WCHAR32)
+	target_compile_definitions(cimgui_base PUBLIC IMGUI_USE_WCHAR32)
+endif(IMGUI_WCHAR32)
+
 target_link_libraries(cimgui_base PUBLIC ${IMGUI_ft_LIBRARIES})
 
 if(UNIX)

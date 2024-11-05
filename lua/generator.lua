@@ -3,6 +3,12 @@ local cpp2ffi = require"cpp2ffi"
 local save_data = cpp2ffi.save_data
 local read_data = cpp2ffi.read_data
 local location = cpp2ffi.location
+----------comand line
+local script_args = {...}
+local FREETYPE_GENERATION = script_args[1]:match("freetype") and true or false
+local WCHAR32_GENERATION = script_args[1]:match("wchar32") and true or false
+
+----------------------------------
 ----utility functions
 local function get_cdefs(gccline,locat,cdef)
 	cdef = cdef or {}
@@ -22,7 +28,9 @@ local function get_all_cdefs(sources)
 	local cdefs = {}
 	for i,v in ipairs(sources) do
 		print("get cdefs from",v)
-		cdefs = get_cdefs([[gcc -E -DCIMGUI_DEFINE_ENUMS_AND_STRUCTS -I "../cimgui" ]].."../"..v.."/"..v..".h",v,cdefs)
+		local def_ft = FREETYPE_GENERATION and " -DIMGUI_ENABLE_FREETYPE -DIMGUI_ENABLE_STB_TRUETYPE " or ""
+		local def_w32 = WCHAR32_GENERATION and " -DIMGUI_USE_WCHAR32 " or ""
+		cdefs = get_cdefs([[gcc -E ]]..def_ft..def_w32..[[-DCIMGUI_DEFINE_ENUMS_AND_STRUCTS -I "../cimgui" ]].."../"..v.."/"..v..".h",v,cdefs)
 	end
 	return cdefs
 end
@@ -80,7 +88,7 @@ save_data("./imgui/cdefs.lua",table.concat(cdefs,"\n"), hstrfile)
 ----- generate imgui/glfw.lua
 print"save glfw.lua"
 local class_gen = require"class_gen"
-local classes = class_gen(sources)
+local classes = class_gen(sources, FREETYPE_GENERATION)
 local iniclass = "local cimguimodule = 'cimgui_glfw' --set imgui directory location\n"
 local base = read_data("./imgui_base.lua")
 local base_glfw = read_data("./imgui_base_glfw.lua")
