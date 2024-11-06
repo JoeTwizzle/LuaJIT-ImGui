@@ -2377,6 +2377,11 @@ function M.imguiGizmo_setSphereColors(a1,a2) -- generic version
 end
 M.imguiGizmo = ffi.metatype("imguiGizmo",imguiGizmo)
 ------------------------------------------------------
+M.ImGuiFreeType_GetBuilderForFreeType = lib.ImGuiFreeType_GetBuilderForFreeType
+function M.ImGuiFreeType_SetAllocatorFunctions(alloc_func,free_func,user_data)
+    user_data = user_data or nil
+    return lib.ImGuiFreeType_SetAllocatorFunctions(alloc_func,free_func,user_data)
+end
 M.ImGuizmo_AllowAxisFlip = lib.ImGuizmo_AllowAxisFlip
 M.ImGuizmo_BeginFrame = lib.ImGuizmo_BeginFrame
 M.ImGuizmo_DecomposeMatrixToComponents = lib.ImGuizmo_DecomposeMatrixToComponents

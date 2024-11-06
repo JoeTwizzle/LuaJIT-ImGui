@@ -75,7 +75,9 @@ option(IMPL_EXTRAS "knob and curve" ON)
 
 
 if(IMGUI_FREETYPE)
+	if (DEFINED FREETYPE_PATH)
 	FIND_PACKAGE(freetype REQUIRED PATHS ${FREETYPE_PATH})
+	endif (DEFINED FREETYPE_PATH)
 	list(APPEND IMGUI_ft_LIBRARIES freetype)
 	list(APPEND IMGUI_LIBRARIES freetype)
 	list(APPEND IMGUI_SOURCES ./cimgui/imgui/misc/freetype/imgui_freetype.cpp)
