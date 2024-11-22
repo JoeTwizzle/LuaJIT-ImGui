@@ -465,6 +465,7 @@ ImGuiSortDirection_Descending=2,
 }ImGuiSortDirection;
 typedef enum {
 ImGuiKey_None=0,
+ImGuiKey_NamedKey_BEGIN=512,
 ImGuiKey_Tab=512,
 ImGuiKey_LeftArrow=513,
 ImGuiKey_RightArrow=514,
@@ -619,18 +620,14 @@ ImGuiKey_ReservedForModCtrl=662,
 ImGuiKey_ReservedForModShift=663,
 ImGuiKey_ReservedForModAlt=664,
 ImGuiKey_ReservedForModSuper=665,
-ImGuiKey_COUNT=666,
+ImGuiKey_NamedKey_END=666,
 ImGuiMod_None=0,
 ImGuiMod_Ctrl=1 << 12,
 ImGuiMod_Shift=1 << 13,
 ImGuiMod_Alt=1 << 14,
 ImGuiMod_Super=1 << 15,
 ImGuiMod_Mask_=0xF000,
-ImGuiKey_NamedKey_BEGIN=512,
-ImGuiKey_NamedKey_END=ImGuiKey_COUNT,
 ImGuiKey_NamedKey_COUNT=ImGuiKey_NamedKey_END - ImGuiKey_NamedKey_BEGIN,
-ImGuiKey_KeysData_SIZE=ImGuiKey_NamedKey_COUNT,
-ImGuiKey_KeysData_OFFSET=ImGuiKey_NamedKey_BEGIN,
 }ImGuiKey;
 typedef enum {
     ImGuiInputFlags_None = 0,
@@ -1044,6 +1041,7 @@ struct ImGuiIO
    _Bool         ConfigDragClickToInputText;
    _Bool         ConfigWindowsResizeFromEdges;
    _Bool         ConfigWindowsMoveFromTitleBarOnly;
+   _Bool         ConfigWindowsCopyContentsWithCtrlC;
    _Bool         ConfigScrollbarScrollByPage;
     float ConfigMemoryCompactTimer;
     float MouseDoubleClickTime;
@@ -1091,7 +1089,7 @@ struct ImGuiIO
    _Bool         KeyAlt;
    _Bool         KeySuper;
     ImGuiKeyChord KeyMods;
-    ImGuiKeyData KeysData[ImGuiKey_KeysData_SIZE];
+    ImGuiKeyData KeysData[ImGuiKey_NamedKey_COUNT];
    _Bool         WantCaptureMouseUnlessPopupClose;
     ImVec2 MousePosPrev;
     ImVec2 MouseClickedPos[5];
@@ -1112,8 +1110,6 @@ struct ImGuiIO
     float PenPressure;
    _Bool         AppFocusLost;
    _Bool         AppAcceptingEvents;
-    ImS8 BackendUsingLegacyKeyArrays;
-   _Bool         BackendUsingLegacyNavInputArray;
     ImWchar16 InputQueueSurrogate;
     ImVector_ImWchar InputQueueCharacters;
 };
@@ -1409,7 +1405,8 @@ struct ImFontAtlasCustomRect
 {
     unsigned short Width, Height;
     unsigned short X, Y;
-    unsigned int GlyphID;
+    unsigned int GlyphID : 31;
+    unsigned int GlyphColored : 1;
     float GlyphAdvanceX;
     ImVec2 GlyphOffset;
     ImFont* Font;
@@ -1617,6 +1614,7 @@ typedef int ImGuiDebugLogFlags;
 typedef int ImGuiFocusRequestFlags;
 typedef int ImGuiItemStatusFlags;
 typedef int ImGuiOldColumnFlags;
+typedef int ImGuiLogFlags;
 typedef int ImGuiNavRenderCursorFlags;
 typedef int ImGuiNavMoveFlags;
 typedef int ImGuiNextItemDataFlags;
@@ -1803,12 +1801,13 @@ typedef enum {
     ImGuiLayoutType_Vertical = 1
 }ImGuiLayoutType_;
 typedef enum {
-    ImGuiLogType_None = 0,
-    ImGuiLogType_TTY,
-    ImGuiLogType_File,
-    ImGuiLogType_Buffer,
-    ImGuiLogType_Clipboard,
-}ImGuiLogType;
+    ImGuiLogFlags_None = 0,
+    ImGuiLogFlags_OutputTTY = 1 << 0,
+    ImGuiLogFlags_OutputFile = 1 << 1,
+    ImGuiLogFlags_OutputBuffer = 1 << 2,
+    ImGuiLogFlags_OutputClipboard = 1 << 3,
+    ImGuiLogFlags_OutputMask_ = ImGuiLogFlags_OutputTTY | ImGuiLogFlags_OutputFile | ImGuiLogFlags_OutputBuffer | ImGuiLogFlags_OutputClipboard,
+}ImGuiLogFlags_;
 typedef enum {
     ImGuiAxis_None = -1,
     ImGuiAxis_X = 0,
@@ -1877,11 +1876,11 @@ struct ImGuiInputTextState
     ImGuiContext* Ctx;
     ImStbTexteditState* Stb;
     ImGuiID ID;
-    int CurLenA;
+    int TextLen;
     ImVector_char TextA;
-    ImVector_char InitialTextA;
+    ImVector_char TextToRevertTo;
     ImVector_char CallbackTextBackup;
-    int BufCapacityA;
+    int BufCapacity;
     ImVec2 Scroll;
     float CursorAnim;
    _Bool         CursorFollow;
@@ -2894,7 +2893,8 @@ struct ImGuiContext
     ImGuiID HookIdNext;
     const char* LocalizationTable[ImGuiLocKey_COUNT];
    _Bool         LogEnabled;
-    ImGuiLogType LogType;
+    ImGuiLogFlags LogFlags;
+    ImGuiWindow* LogWindow;
     ImFileHandle LogFile;
     ImGuiTextBuffer LogBuffer;
     const char* LogNextPrefix;
@@ -3973,7 +3973,7 @@ void ImDrawList_AddNgonFilled(ImDrawList* self,const ImVec2 center,float radius,
 void ImDrawList_AddEllipse(ImDrawList* self,const ImVec2 center,const ImVec2 radius,ImU32 col,float rot,int num_segments,float thickness);
 void ImDrawList_AddEllipseFilled(ImDrawList* self,const ImVec2 center,const ImVec2 radius,ImU32 col,float rot,int num_segments);
 void ImDrawList_AddText_Vec2(ImDrawList* self,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end);
-void ImDrawList_AddText_FontPtr(ImDrawList* self,const ImFont* font,float font_size,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end,float wrap_width,const ImVec4* cpu_fine_clip_rect);
+void ImDrawList_AddText_FontPtr(ImDrawList* self,ImFont* font,float font_size,const ImVec2 pos,ImU32 col,const char* text_begin,const char* text_end,float wrap_width,const ImVec4* cpu_fine_clip_rect);
 void ImDrawList_AddBezierCubic(ImDrawList* self,const ImVec2 p1,const ImVec2 p2,const ImVec2 p3,const ImVec2 p4,ImU32 col,float thickness,int num_segments);
 void ImDrawList_AddBezierQuadratic(ImDrawList* self,const ImVec2 p1,const ImVec2 p2,const ImVec2 p3,ImU32 col,float thickness,int num_segments);
 void ImDrawList_AddPolyline(ImDrawList* self,const ImVec2* points,int num_points,ImU32 col,ImDrawFlags flags,float thickness);
@@ -4395,6 +4395,7 @@ void ImGuiTableColumnSettings_destroy(ImGuiTableColumnSettings* self);
 ImGuiTableSettings* ImGuiTableSettings_ImGuiTableSettings(void);
 void ImGuiTableSettings_destroy(ImGuiTableSettings* self);
 ImGuiTableColumnSettings* ImGuiTableSettings_GetColumnSettings(ImGuiTableSettings* self);
+ImGuiIO* igGetIOEx(ImGuiContext* ctx);
 ImGuiWindow* igGetCurrentWindowRead(void);
 ImGuiWindow* igGetCurrentWindow(void);
 ImGuiWindow* igFindWindowByID(ImGuiID id);
@@ -4496,7 +4497,7 @@ void igShrinkWidths(ImGuiShrinkWidthItem* items,int count,float width_excess);
 const ImGuiDataVarInfo* igGetStyleVarInfo(ImGuiStyleVar idx);
 void igBeginDisabledOverrideReenable(void);
 void igEndDisabledOverrideReenable(void);
-void igLogBegin(ImGuiLogType type,int auto_open_depth);
+void igLogBegin(ImGuiLogFlags flags,int auto_open_depth);
 void igLogToBuffer(int auto_open_depth);
 void igLogRenderedText(const ImVec2* ref_pos,const char* text,const char* text_end);
 void igLogSetNextTextDecoration(const char* prefix,const char* suffix);

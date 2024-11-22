@@ -567,7 +567,7 @@ function ImDrawList:AddText_FontPtr(font,font_size,pos,col,text_begin,text_end,w
 end
 function ImDrawList:AddText(a2,a3,a4,a5,a6,a7,a8,a9) -- generic version
     if ffi.istype('const ImVec2',a2) then return self:AddText_Vec2(a2,a3,a4,a5) end
-    if (ffi.istype('const ImFont*',a2) or ffi.istype('const ImFont',a2) or ffi.istype('const ImFont[]',a2)) then return self:AddText_FontPtr(a2,a3,a4,a5,a6,a7,a8,a9) end
+    if (ffi.istype('ImFont*',a2) or ffi.istype('ImFont',a2) or ffi.istype('ImFont[]',a2)) then return self:AddText_FontPtr(a2,a3,a4,a5,a6,a7,a8,a9) end
     print(a2,a3,a4,a5,a6,a7,a8,a9)
     error'ImDrawList:AddText could not find overloaded'
 end
@@ -6032,6 +6032,7 @@ function M.GetIDWithSeed(a1,a2,a3) -- generic version
     error'M.GetIDWithSeed could not find overloaded'
 end
 M.GetIO = lib.igGetIO
+M.GetIOEx = lib.igGetIOEx
 M.GetInputTextState = lib.igGetInputTextState
 M.GetItemFlags = lib.igGetItemFlags
 M.GetItemID = lib.igGetItemID
