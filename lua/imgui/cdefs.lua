@@ -6443,12 +6443,12 @@ typedef int vgModifiers;
 typedef struct Vec4{
  float x,y,z,w;
 }Vec4;
-typedef struct G3Dvec4{
+typedef struct vec4{
  float x,y,z,w;
-}G3Dvec4;
-typedef struct G3Dvec3{
+}vec4;
+typedef struct vec3{
  float x,y,z;
-}G3Dvec3;
+}vec3;
 typedef struct Mat4{
  union {
   float f[16];
@@ -6458,13 +6458,13 @@ typedef struct Mat4{
 typedef struct quat{
  float x,y,z,w;
 }quat;
-typedef struct ImVector_G3Dvec3 {int Size;int Capacity;G3Dvec3* Data;} ImVector_G3Dvec3;
+typedef struct ImVector_vec3 {int Size;int Capacity;vec3* Data;} ImVector_vec3;
 typedef struct imguiGizmo imguiGizmo;
 struct imguiGizmo
 {
     quat qtV;
     quat qtV2;
-    G3Dvec3 posPanDolly;
+    vec3 posPanDolly;
     vgButtons buttonPanDolly;
     int drawMode;
     int axesOriginType;
@@ -6489,11 +6489,11 @@ struct imguiGizmo
 typedef enum { backSide, frontSide }solidSides;
 void imguiGizmo_buildPlane(const float size,const float thickness);
 void imguiGizmo_buildCube(const float size);
-void imguiGizmo_buildPolygon(const G3Dvec3 size,ImVector_G3Dvec3 * vtx,ImVector_G3Dvec3 * norm);
+void imguiGizmo_buildPolygon(const vec3 size,ImVector_vec3 * vtx,ImVector_vec3 * norm);
 void imguiGizmo_buildSphere(const float radius,const int tessFactor);
 void imguiGizmo_buildCone(const float x0,const float x1,const float radius,const int slices);
 void imguiGizmo_buildCylinder(const float x0,const float x1,const float radius,const int slices);
-void imguiGizmo_resizeAxesOf(const G3Dvec3 newSize);
+void imguiGizmo_resizeAxesOf(const vec3 newSize);
 void imguiGizmo_restoreAxesSize(void);
 void imguiGizmo_resizeSolidOf(float newSize);
 void imguiGizmo_restoreSolidSize(void);
@@ -6516,24 +6516,24 @@ float imguiGizmo_getPanScale(void);
 _Bool                imguiGizmo_drawFunc(imguiGizmo* self,const char* label,float size);
 void imguiGizmo_modeSettings(imguiGizmo* self,int mode);
 void imguiGizmo_setDualMode(imguiGizmo* self,const int mode);
-_Bool                imguiGizmo_getTransforms_vec3Ptr(imguiGizmo* self,quat* q,const char* label,G3Dvec3* dir,float size);
-_Bool                imguiGizmo_getTransforms_vec4Ptr(imguiGizmo* self,quat* q,const char* label,G3Dvec4* axis_angle,float size);
+_Bool                imguiGizmo_getTransforms_vec3Ptr(imguiGizmo* self,quat* q,const char* label,vec3* dir,float size);
+_Bool                imguiGizmo_getTransforms_vec4Ptr(imguiGizmo* self,quat* q,const char* label,vec4* axis_angle,float size);
 _Bool                iggizmo3D_quatPtrFloat(const char* noname1,quat* noname2,float noname3,const int noname4);
-_Bool                iggizmo3D_vec4Ptr(const char* noname1,G3Dvec4* noname2,float noname3,const int noname4);
-_Bool                iggizmo3D_vec3PtrFloat(const char* noname1,G3Dvec3* noname2,float noname3,const int noname4);
+_Bool                iggizmo3D_vec4Ptr(const char* noname1,vec4* noname2,float noname3,const int noname4);
+_Bool                iggizmo3D_vec3PtrFloat(const char* noname1,vec3* noname2,float noname3,const int noname4);
 _Bool                iggizmo3D_quatPtrquatPtr(const char* noname1,quat* noname2,quat* noname3,float noname4,const int noname5);
-_Bool                iggizmo3D_quatPtrvec4Ptr(const char* noname1,quat* noname2,G3Dvec4* noname3,float noname4,const int noname5);
-_Bool                iggizmo3D_quatPtrvec3Ptr(const char* noname1,quat* noname2,G3Dvec3* noname3,float noname4,const int noname5);
-_Bool                iggizmo3D_vec3PtrquatPtrFloat(const char* noname1,G3Dvec3* noname2,quat* noname3,float noname4,const int noname5);
-_Bool                iggizmo3D_vec3Ptrvec4Ptr(const char* noname1,G3Dvec3* noname2,G3Dvec4* noname3,float noname4,const int noname5);
-_Bool                iggizmo3D_vec3Ptrvec3Ptr(const char* noname1,G3Dvec3* noname2,G3Dvec3* noname3,float noname4,const int noname5);
-_Bool                iggizmo3D_vec3PtrquatPtrquatPtr(const char* noname1,G3Dvec3* noname2,quat* noname3,quat* noname4,float noname5,const int noname6);
-_Bool                iggizmo3D_vec3PtrquatPtrvec4Ptr(const char* noname1,G3Dvec3* noname2,quat* noname3,G3Dvec4* noname4,float noname5,const int noname6);
-_Bool                iggizmo3D_vec3PtrquatPtrvec3Ptr(const char* noname1,G3Dvec3* noname2,quat* noname3,G3Dvec3* noname4,float noname5,const int noname6);
+_Bool                iggizmo3D_quatPtrvec4Ptr(const char* noname1,quat* noname2,vec4* noname3,float noname4,const int noname5);
+_Bool                iggizmo3D_quatPtrvec3Ptr(const char* noname1,quat* noname2,vec3* noname3,float noname4,const int noname5);
+_Bool                iggizmo3D_vec3PtrquatPtrFloat(const char* noname1,vec3* noname2,quat* noname3,float noname4,const int noname5);
+_Bool                iggizmo3D_vec3Ptrvec4Ptr(const char* noname1,vec3* noname2,vec4* noname3,float noname4,const int noname5);
+_Bool                iggizmo3D_vec3Ptrvec3Ptr(const char* noname1,vec3* noname2,vec3* noname3,float noname4,const int noname5);
+_Bool                iggizmo3D_vec3PtrquatPtrquatPtr(const char* noname1,vec3* noname2,quat* noname3,quat* noname4,float noname5,const int noname6);
+_Bool                iggizmo3D_vec3PtrquatPtrvec4Ptr(const char* noname1,vec3* noname2,quat* noname3,vec4* noname4,float noname5,const int noname6);
+_Bool                iggizmo3D_vec3PtrquatPtrvec3Ptr(const char* noname1,vec3* noname2,quat* noname3,vec3* noname4,float noname5,const int noname6);
 void mat4_cast( quat *q,Mat4* mat);
-void mat4_pos_cast( quat *q, G3Dvec3 pos, Mat4* mat);
+void mat4_pos_cast( quat *q, vec3 pos, Mat4* mat);
 void quat_cast(float f[16], quat *qq);
-void quat_pos_cast(float f[16], quat *qq, G3Dvec3 *pos);
+void quat_pos_cast(float f[16], quat *qq, vec3 *pos);
 typedef struct ImGuiContext ImGuiContext;
 typedef struct ImVec2 ImVec2;
 typedef struct ImNodesContext ImNodesContext;
