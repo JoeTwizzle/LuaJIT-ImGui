@@ -2379,6 +2379,7 @@ end
 M.ImGuizmo_IsUsing = lib.ImGuizmo_IsUsing
 M.ImGuizmo_IsUsingAny = lib.ImGuizmo_IsUsingAny
 M.ImGuizmo_IsUsingViewManipulate = lib.ImGuizmo_IsUsingViewManipulate
+M.ImGuizmo_IsViewManipulateHovered = lib.ImGuizmo_IsViewManipulateHovered
 function M.ImGuizmo_Manipulate(view,projection,operation,mode,matrix,deltaMatrix,snap,localBounds,boundsSnap)
     boundsSnap = boundsSnap or nil
     deltaMatrix = deltaMatrix or nil

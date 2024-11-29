@@ -6407,6 +6407,7 @@ void ImGuizmo_SetImGuiContext(ImGuiContext* ctx);
 _Bool                ImGuizmo_IsOver_Nil(void);
 _Bool                ImGuizmo_IsUsing(void);
 _Bool                ImGuizmo_IsUsingViewManipulate(void);
+_Bool                ImGuizmo_IsViewManipulateHovered(void);
 _Bool                ImGuizmo_IsUsingAny(void);
 void ImGuizmo_Enable(                               _Bool                                     enable);
 void ImGuizmo_DecomposeMatrixToComponents(const float* matrix,float* translation,float* rotation,float* scale);
